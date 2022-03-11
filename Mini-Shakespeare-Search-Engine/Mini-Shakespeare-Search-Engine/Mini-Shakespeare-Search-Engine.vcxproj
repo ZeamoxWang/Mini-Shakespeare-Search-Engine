@@ -142,13 +142,16 @@
     <ClCompile Include="BPlusTree.cpp" />
     <ClCompile Include="dictionary.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="porter2_stemmer.cpp" />
     <ClCompile Include="postingNode.cpp" />
     <ClCompile Include="term.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BPlusTree.h" />
     <ClInclude Include="dictionary.h" />
+    <ClInclude Include="porter2_stemmer.h" />
     <ClInclude Include="postingNode.h" />
+    <ClInclude Include="string_view.h" />
     <ClInclude Include="term.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

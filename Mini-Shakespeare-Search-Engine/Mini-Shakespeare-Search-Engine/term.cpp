@@ -15,7 +15,7 @@ void term::print()
 }
 
 /// <summary>
-/// If the doc has had this word, return true;
+/// If the doc has had this word, return true and change its posting list;
 /// If the doc doesn't have this word, return false;
 /// If this term appears at first time, it's posting list could be built;
 /// </summary>

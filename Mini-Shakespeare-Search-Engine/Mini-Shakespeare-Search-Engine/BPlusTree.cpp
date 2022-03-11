@@ -8,6 +8,9 @@ leaf::leaf(string n, node* par, btype status, int doc, int pos) :node(n, par, st
 	}
 }
 
+/// <summary>
+/// Print detailed info for test;
+/// </summary>
 void node::print()
 {
 	deque<node*> d;
@@ -66,6 +69,12 @@ string node::getMin()
 	return p->data[0];
 }
 
+/// <summary>
+/// This function is used for insert a new node to an original node in the B+ tree;
+/// If this action caused a split, it will return the split outcome with the biggest one poped;
+/// </summary>
+/// <param name="newL"></param>
+/// <returns></returns>
 node* node::insert2Node(node* newL)
 {
 	// Make sure its status;
@@ -76,6 +85,7 @@ node* node::insert2Node(node* newL)
 	// Find a proper position to insert the new leaf node;
 	switch (this->status) {
 	case inner1:
+		// It could receive a more siblings;
 		if (newL->data[0] < this->pt[0]->data[0]) {
 			this->pt[2] = this->pt[1];
 			this->pt[1] = this->pt[0];
@@ -99,6 +109,8 @@ node* node::insert2Node(node* newL)
 		break;
 
 	case inner2:
+		// It is full and cannot insert another sibling;
+		// So it rearranges its children and pops the biggest one;
 		node* pop = NULL;
 		if (newL->data[0] < this->pt[0]->data[0]) {
 			pop = this->pt[2];
@@ -119,6 +131,7 @@ node* node::insert2Node(node* newL)
 			pop = newL;
 		}
 
+		// Set up for the new nodes popped out;
 		node* sibling = new node(pop->getMin(), this->parent, inner1);
 		sibling->pt[0] = this->pt[2];
 		sibling->pt[1] = pop;
@@ -133,7 +146,7 @@ node* node::insert2Node(node* newL)
 }
 
 /// <summary>
-/// 
+/// Construct a node;
 /// </summary>
 /// <param name="n">add data</param>
 /// <param name="par">indicate its parents</param>
@@ -158,6 +171,7 @@ node::node(string n, node* par, btype s)
 /// <returns></returns>
 node* node::search(string n)
 {
+	// Status > 0 means that we have arrived the leaf;
 	if (this->status > 0) {
 		return this;
 	}
@@ -202,6 +216,7 @@ string leaf::insert2Leaf(string n, int doc, int pos)
 	switch (this->status)
 	{
 	case leaf1:
+		// We can directly have things inserted;
 		if (n < data[0]) {
 			data[1] = data[0];
 			data[0] = n;
@@ -217,6 +232,7 @@ string leaf::insert2Leaf(string n, int doc, int pos)
 		break;
 
 	case leaf2:
+		// We can directly have things inserted;
 		if (n < data[0]) {
 			data[2] = data[1];
 			data[1] = data[0];
@@ -240,7 +256,7 @@ string leaf::insert2Leaf(string n, int doc, int pos)
 		break;
 
 	case leaf3:
-		// We don't create a new term at this time;
+		// We don't create a new term at this time, but pop the data;
 		string pop;
 		if (n < data[0]) {
 			pop = data[2];
@@ -292,11 +308,12 @@ node* node::splitUpwards(string n, int doc, int pos)
 
 	switch (i) {
 	case 3:
-		// i == 3 means that the poped word is the biggest one and now it's in newLeaf->data[1];
+		// i == 3 means that the popped word is the biggest one and now it's in newLeaf->data[1];
 		newLeaf->t[1] = new term(newLeaf->data[1], doc, pos);
 		newLeaf->t[0] = originLeaf->t[2];
 		break;
 	case 2:
+		// the inserted word is the second large one, and it should be the children of new leaf;
 		newLeaf->t[1] = originLeaf->t[2];
 		newLeaf->t[0] = new term(newLeaf->data[0], doc, pos);
 		break;
@@ -313,8 +330,11 @@ node* node::splitUpwards(string n, int doc, int pos)
 		break;
 	}
 
-
+	// The split node should be rearranged;
 	if (originLeaf->parent != NULL) {
+		// plugged is used for denoting the new poped one;
+		// If it is not NULL, we should plug it into its parents,
+		// until there is nothing new poped!
 		node* plugged = originLeaf->parent->insert2Node(newLeaf);
 		while (plugged != NULL && plugged->parent != NULL) {
 			plugged = plugged->parent->insert2Node(plugged);
@@ -345,12 +365,13 @@ node* node::insert(string n, int doc, int pos)
 {
 	leaf* target = (leaf*)this->search(n);
 	string insertReturn = target->insert2Leaf(n, doc, pos);
+	// If this condition is true, it means that this leaf is full, we should split;
 	if (insertReturn != INSERTDONE && insertReturn != DUPLICATED) {
 		node* temp = target->splitUpwards(insertReturn, doc, pos);
 		if (temp != NULL) {
 			return temp;
 		}
-	}
+	}// If this condition is true, we just add a new record into this word item;
 	else if (insertReturn == DUPLICATED) {
 		if (n == target->data[0]) {
 			target->t[0]->visit(doc, pos);
@@ -365,3 +386,18 @@ node* node::insert(string n, int doc, int pos)
 	return this;
 }
 
+/// <summary>
+/// This function simply judge if the B+ tree has this word;
+/// </summary>
+/// <param name="n"></param>
+/// <returns></returns>
+bool node::contain(const string& n)
+{
+	leaf* target = (leaf*)this->search(n);
+	if (n == target->data[0] || n == target->data[1] || n == target->data[2]) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}

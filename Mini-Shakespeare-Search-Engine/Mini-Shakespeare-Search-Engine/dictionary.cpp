@@ -1,6 +1,6 @@
 #include "dictionary.h"
 
-void dictionary::query(int N)
+void dictionary::singleWordQuery(int N)
 {
 	string word;
 	term* tmp;
@@ -8,17 +8,26 @@ void dictionary::query(int N)
 
 		cin >> word;
 
-		/* The string needs to be stemmed there......*/
+		// Cut out the punctuations;
+		Porter2Stemmer::trim(word);
+		// Analysis the word's stem;
+		Porter2Stemmer::stem(word);
 
-		// You can retrive this return value to do further analysis;
-		tmp = this->searchSingleWord(word);
-		if (tmp == NULL) {
-			cout << "This word doesn't appear in anywhere!" << endl;
-
-		/* Can we give some search suggestions here? */
+		if (this->stopWords->contain(word)) {
+			cout << "Please do not input a stop word!" << endl;
 		}
 		else {
-			tmp->print();
+			// You can retrive this return value to do further analysis;
+			tmp = this->searchSingleWord(word);
+			if (tmp == NULL) {
+				cout << "This word doesn't appear in anywhere!" << endl;
+
+			/* Can we give some search suggestions here? */
+			}
+			else {
+				tmp->print();
+			}
+
 		}
 
 	}
@@ -52,23 +61,35 @@ void dictionary::getDocAndScan(const string& in_name, const int& docCount)
 	int wordsCount = 0;
 	while (fin >> str) {
 
-		/* The string needs to be stemmed there......*/
+		// Cut out the punctuations;
+		Porter2Stemmer::trim(str);
+		// Analysis the word's stem;
+		Porter2Stemmer::stem(str);
+		// Analysis for stop words!
+		if (this->stopWords->contain(str)) {
+			continue;
+		}
+		else {
+			wordsCount += 1;
+			this->root = this->root->insert(str, docCount, wordsCount);
+		}
 
-		wordsCount += 1;
-		this->root = this->root->insert(str, docCount, wordsCount);
 	}
 
 }
 
-dictionary::dictionary(const string& docPath)
+
+dictionary::dictionary(const string& docPath, stopDic* stopW)
 {
-	this->root = new leaf("Shakespeare", NULL, leaf1, -1, -1);
+	this->stopWords = stopW;
+	this->root = new leaf("", NULL, leaf1, -1, -1);
 	struct _finddata_t fileinfo;
 	string in_path = docPath;
 	string in_name;
 	int docCount = 0;
 	string curr = in_path + "\\*.txt";
 	long handle;
+	// If we can't find any file;
 	if ((handle = _findfirst(curr.c_str(), &fileinfo)) == -1L)
 	{
 		cout << "There is no txt file!" << endl;
@@ -81,11 +102,35 @@ dictionary::dictionary(const string& docPath)
 		{
 			in_name = in_path + "\\" + fileinfo.name;
 			docCount += 1;
+			// We enumerate the files automatically;
 			getDocAndScan(in_name, docCount);
 		}
 		_findclose(handle);
 	}
 
-	cout << "OK! Data has already been loaded! " << endl;
+	cout << "OK! All of data have already been loaded! " << endl;
+	cout << "\n\n\n\n\n";
 
+}
+
+stopDic::stopDic(const string& docPath)
+{
+	this->root = new leaf("", NULL, leaf1, 0, 0);
+	struct _finddata_t fileinfo;
+	ifstream fin(docPath);
+	if (!fin) {
+		cerr << "Open stop words file error!" << endl;
+		exit(-1);
+	}
+	string str;
+	while (fin >> str) {
+		this->root = this->root->insert(str, 0, 0);
+	}
+
+	cout << "Stop words have already been loaded! " << endl;
+}
+
+bool stopDic::contain(const string& word)
+{
+	return this->root->contain(word);
 }

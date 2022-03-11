@@ -32,7 +32,7 @@
 
 #include <vector>
 #include <string>
-#include "util/string_view.h"
+#include "util\\string_view.h"
 
 namespace Porter2Stemmer
 {

@@ -30,6 +30,9 @@
     <ClCompile Include="dictionary.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="porter2_stemmer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BPlusTree.h">
@@ -42,6 +45,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="dictionary.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="porter2_stemmer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="string_view.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
