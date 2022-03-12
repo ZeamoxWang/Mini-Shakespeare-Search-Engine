@@ -1,4 +1,16 @@
-﻿  dictionary.cpp
+﻿  BPlusTree.cpp
+  dictionary.cpp
 E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\util\hash.h(336,16): warning C4244: “return”: 从“uint64_t”转换到“size_t”，可能丢失数据
-E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\dictionary.cpp(112,21): warning C4101: “fileinfo”: 未引用的局部变量
+E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\dictionary.cpp(119,21): warning C4101: “fileinfo”: 未引用的局部变量
+  main.cpp
+E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\util\hash.h(336,16): warning C4244: “return”: 从“uint64_t”转换到“size_t”，可能丢失数据
+  postingNode.cpp
+E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\postingNode.cpp(11,20): warning C4018: “<”: 有符号/无符号不匹配
+  term.cpp
+E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\term.cpp(11,20): warning C4018: “<”: 有符号/无符号不匹配
+E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\term.cpp(29,16): warning C4018: “<”: 有符号/无符号不匹配
+  正在生成代码...
+E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\BPlusTree.cpp(146): warning C4715: “node::insert2Node”: 不是所有的控件路径都返回值
+E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\BPlusTree.cpp(197): warning C4715: “node::search”: 不是所有的控件路径都返回值
+E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\BPlusTree.cpp(284): warning C4715: “leaf::insert2Leaf”: 不是所有的控件路径都返回值
   Mini-Shakespeare-Search-Engine.vcxproj -> E:\Desktop\Mini-Shakespeare-Search-Engine\Mini-Shakespeare-Search-Engine\Debug\Mini-Shakespeare-Search-Engine.exe
